@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My tasks · Tasklane</title>
+  <script src="{% static 'js/theme.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/themes.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="{% url 'task:home' %}">Tasklane</a>
+      <div class="site-header__menu" id="main-nav">
+        <nav class="main-nav" aria-label="Main">
+          <a href="{% url 'task:home' %}" {% if request.path == '/' %} aria-current="page" {% endif %}>Tasks</a>
+          <a href="{% url 'task:manage' %}" {% if request.path == '/manage/' %} aria-current="page" {% endif %} >Manage</a>
+          <a href="{% url 'task:profile' %}" {% if request.path == '/profile/' %} aria-current="page" {% endif %}>Profile</a>
+        </nav>
+        <div class="header-actions">
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+            <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+          </button>
+          <form action="logout" method="post">
+            <a href="{% url 'accounts_app:logout' %}" class="btn btn--ghost btn--sm" type="submit">Log out</a>
+          </form>
+        </div>
+      </div>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main class="container page">
+    {% block content %}  {% endblock content %}
+  </main>
+
+  <script src="{% static 'js/nav.js' %}"></script>
+</body>
+</html>

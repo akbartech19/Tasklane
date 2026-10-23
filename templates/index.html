@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-head">
+      <div>
+        <h1>My tasks</h1>
+        <p>{{ open_count }} open, {{ done_count }} done</p>
+      </div>
+      <a class="btn" href="{% url 'task:manage' %}">Add task</a>
+    </div>
+
+    <form class="card filter-form" action="{% url 'task:home' %}" method="get">
+      <div class="field field--search">
+        <label for="q">Search</label>
+        <input class="input" id="q" name="q" type="search" value="{{ q }}" placeholder="Search by title">
+      </div>
+      <div class="field">
+        <label for="status">Status</label>
+        <select class="select" id="status" name="status">
+          <option value="">All</option>
+          <option value="open" {% if status == 'open' %}selected{% endif %}>Open</option>
+          <option value="done" {% if status == 'done' %}selected{% endif %}>Done</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="priority">Priority</label>
+        <select class="select" id="priority" name="priority">
+          <option value="">Any</option>
+          <option value="high" {% if priority == 'high' %}selected{% endif %}>High</option>
+          <option value="medium" {% if priority == 'medium' %}selected{% endif %}>Medium</option>
+          <option value="low" {% if priority == 'low' %}selected{% endif %}>Low</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">Apply</button>
+        <a class="btn btn--ghost" href="{% url 'task:home' %}">Reset</a>
+      </div>
+    </form>
+
+    <ul class="task-list">
+      {% for t in tasks %}
+      <li class="task {% if t.status %}task--done{% endif %}">
+        <form action="{% url 'task:toggle' t.id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button class="check {% if t.status %}check--on{% endif %}" type="submit"
+                  aria-label="{% if t.status %}Mark as open{% else %}Mark as done{% endif %}"></button>
+        </form>
+        <div class="task__body">
+          <h2 class="task__title">{{ t.title }}</h2>
+          {% if t.description %}<p class="task__desc">{{ t.description }}</p>{% endif %}
+          <div class="task__meta">
+            <span class="badge badge--{{ t.priority }}">{{ t.priority }}</span>
+            {% if t.due_date %}<span>{{ t.due_date }}</span>{% endif %}
+          </div>
+        </div>
+      </li>
+      {% empty %}
+      <li class="task"><div class="task__body"><p>No tasks found.</p></div></li>
+      {% endfor %}
+    </ul>
+{% endblock content %}

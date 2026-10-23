@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-head">
+      <div>
+        <h1>Manage tasks</h1>
+        <p>Create, edit, and delete tasks.</p>
+
+      {% if messages %}
+          {% for message in messages %}
+            <p class="field__hint" style="color: greenyellow;font-size: 15px;margin-top: 10px;">{{ message }}</p>
+          {% endfor %}
+      {% endif %}
+
+      </div>
+    </div>
+
+    <section class="card" style="margin-top: 10px;" aria-labelledby="create-title">
+      <h2 id="create-title">New task</h2>
+      <form class="form" method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label for="new-title">Title</label>
+          <input class="input" id="new-title" name="title" type="text" required maxlength="120">
+        </div>
+        <div class="field">
+          <label for="new-description">Description</label>
+          <textarea class="textarea" id="new-description" name="description"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="new-priority">Priority</label>
+            <select class="select" id="new-priority" name="priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="new-due">Due date</label>
+            <input class="input" id="new-due" name="due_date" type="date">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn" type="submit">Create task</button>
+        </div>
+      </form>
+    </section>
+
+    <section aria-labelledby="all-title">
+      <h2 id="all-title">All tasks</h2>
+      <ul class="task-list" style="margin-top: var(--space-3)">
+
+        {% for task in tasks %}
+        <li class="manage-item">
+          <details>
+            <summary class="manage-item__row">
+              <span class="manage-item__title">{{ task.title }}</span>
+              <span class="badge badge--{{ task.priority }}">{{ task.priority }}</span>
+              <span class="btn btn--ghost btn--sm">Edit</span>
+            </summary>
+            <div class="manage-item__edit">
+              <form class="form" action="{% url 'task:update' task.id %}" method="post">
+                {% csrf_token %}
+                <div class="field">
+                  <label for="t{{ task.id }}-title">Title</label>
+                  <input class="input" id="t{{ task.id }}-title" name="title" type="text" value="{{ task.title }}" required>
+                </div>
+                <div class="field">
+                  <label for="t{{ task.id }}-description">Description</label>
+                  <textarea class="textarea" id="t{{ task.id }}-description" name="description">{{ task.description }}</textarea>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="t{{ task.id }}-priority">Priority</label>
+                    <select class="select" id="t{{ task.id }}-priority" name="priority">
+                      <option value="low" {% if task.priority == 'low' %}selected{% endif %}>Low</option>
+                      <option value="medium" {% if task.priority == 'medium' %}selected{% endif %}>Medium</option>
+                      <option value="high" {% if task.priority == 'high' %}selected{% endif %}>High</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="t{{ task.id }}-due">Due date</label>
+                    <input class="input" id="t{{ task.id }}-due" name="due_date" type="date" value="{{ task.due_date|date:'Y-m-d' }}">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn" type="submit">Save changes</button>
+                </div>
+              </form>
+              <form action="{% url 'task:delete' task.id %}" method="post" style="margin-top: var(--space-3)">
+                {% csrf_token %}
+                <button class="btn btn--danger btn--sm" type="submit">Delete task</button>
+              </form>
+            </div>
+          </details>
+        </li>
+        {% empty %}
+        <li class="manage-item"><p>No tasks yet.</p></li>
+        {% endfor %}
+
+      </ul>
+    </section>
+    
+{% endblock content %}
