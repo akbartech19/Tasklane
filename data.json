@@ -1,0 +1,106 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-10-21T10:23:15.843Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "read a book",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$t7O2bcLumBieTYrWB5lcHr$Sff8bvz9Y/F3IobZluA0HQntyYsjXioMK11UWLH8vGw=",
+    "last_login": "2026-10-21T11:35:13.328Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-21T10:19:39.292Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$rKxgEGt44JUFyz8UdqrG3N$7wpxnjh9zNjn8k5GzG/5CQQ7w6VdmYYtmA+n/6t7E0U=",
+    "last_login": "2026-10-21T10:25:11.778Z",
+    "is_superuser": false,
+    "username": "akbaraminjonov2@gmail.com",
+    "first_name": "Akbar Aminjonov",
+    "last_name": "",
+    "email": "akbaraminjonov2@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-21T10:25:07.928Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$d4DXtHmeNWtEC5YTHV8JNu$MMxtJy70EOQEu3AdPTCRt8DmnGRVqqJPXT8akrBY7gg=",
+    "last_login": "2026-10-25T06:06:54.063Z",
+    "is_superuser": false,
+    "username": "akbaraminjonov80@gmail.com",
+    "first_name": "Akbar Aminjonov",
+    "last_name": "",
+    "email": "akbaraminjonov80@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-21T10:46:22.791Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "563bj3bkb5jhe7ytqs8olkwzmqoziwv4",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMAP_iGUV1iOu0IztviOzE0AJqpaadEH9HlTrAene6NyTZ1iFt1ZY0FuiB4PTLVPLTpl2Uh0z32eV5WpdR3Z64w1Z3nYu9Lkf7NxikDtBDFMtNQQzsQ-gsk9y8kVpkRd9GVopEhOIRpTmjGTKhclfaElpuFD5f2Vg3Og:1xKCMM:SrFXRX0TVQt3FbB2pTANEURNR0xAAzZwoKZ1WkdJ__k",
+    "expire_date": "2026-11-06T10:18:50.222Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "b49s4zyu3qhllohrrx8d8lrro8ugm9bh",
+  "fields": {
+    "session_data": ".eJxVjM0OgjAQBt9lz6ah9I9y9O4zkK_bxaIGEgon47sbEg56nZnMmwbsWxn2KuswZerJ0OWXJfBT5kPkB-b7oniZt3VK6kjUaau6LVle17P9GxTUQj1JZO2zsy5CPLRmwDUaQWwHF8G5YxldJ8kHk0zjnWkzWjawSesxBfp8AfuMOIA:1xKrNe:PlK1RH534BTKwLe9IW6o1KS4TaFWUUIWV-wA5zj6MLU",
+    "expire_date": "2026-11-08T06:06:54.070Z"
+  }
+},
+{
+  "model": "task.task",
+  "pk": 7,
+  "fields": {
+    "title": " knejn",
+    "description": "scjwkhclw",
+    "due_date": null,
+    "priority": "medium",
+    "status": false,
+    "created_at": "2026-10-23T11:35:24.473Z",
+    "user": 3
+  }
+},
+{
+  "model": "task.profile",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "bio": ""
+  }
+}
+]

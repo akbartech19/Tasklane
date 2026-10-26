@@ -1,67 +1,232 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="profile-head">
-      <div class="avatar" aria-hidden="true">{{ initials }}</div>
-      <div>
+<div class="profile-head">
+    <div class="avatar" aria-hidden="true">{{ initials }}</div>
+    <div>
         <h1>Profile</h1>
         <p>Update your details and password.</p>
+
         {% for message in messages %}
-          <p class="field__hint" style="color: {% if message.tags == 'error' %}tomato{% else %}greenyellow{% endif %}; font-size: 15px; margin-top: 10px;">{{ message }}</p>
+            <p class="field__hint"
+               style="color: {% if message.tags == 'error' %}tomato{% else %}greenyellow{% endif %}; font-size: 15px; margin-top: 10px;">
+                {{ message }}
+            </p>
         {% endfor %}
-      </div>
     </div>
+</div>
 
-    <div class="grid-2">
-      <section class="card" aria-labelledby="details-title">
+<div class="grid-2">
+    <section class="card" aria-labelledby="details-title">
         <h2 id="details-title">Your details</h2>
+
         <form class="form" action="{% url 'task:profile_update' %}" method="post">
-          {% csrf_token %}
-          <div class="field">
-            <label for="full-name">Full name</label>
-            <input class="input" id="full-name" name="full_name" type="text" value="{{ full_name }}" required>
-          </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input class="input" id="email" name="email" type="email" value="{{ request.user.email }}" required>
-          </div>
-          <div class="field">
-            <label for="bio">About you</label>
-            <textarea class="textarea" id="bio" name="bio">{{ profile.bio }}</textarea>
-          </div>
-          <div class="form-actions">
-            <button class="btn" type="submit">Save changes</button>
-          </div>
-        </form>
-      </section>
+            {% csrf_token %}
 
-      <section class="card" aria-labelledby="password-title">
-        <h2 id="password-title">Change password</h2>
-        <form class="form" action="{% url 'task:profile_password' %}" method="post">
-          {% csrf_token %}
-          <div class="field">
-            <label for="current-password">Current password</label>
-            <input class="input" id="current-password" name="current_password" type="password" autocomplete="current-password" required>
-          </div>
-          <div class="field">
-            <label for="new-password">New password</label>
-            <input class="input" id="new-password" name="new_password" type="password" autocomplete="new-password" minlength="8" required>
-            <p class="field__hint">Use at least 8 characters.</p>
-          </div>
-          <div class="form-actions">
-            <button class="btn" type="submit">Update password</button>
-          </div>
-        </form>
-      </section>
-    </div>
+            <div class="field">
+                <label for="full-name">Full name</label>
+                <input class="input" id="full-name" name="full_name"
+                       type="text" value="{{ full_name }}" required>
+            </div>
 
-    <section class="card card--danger" aria-labelledby="delete-title">
-      <h2 id="delete-title">Delete account</h2>
-      <p>This permanently removes your account and all your tasks.</p>
-      <form action="{% url 'task:profile_delete' %}" method="post"
-            onsubmit="return confirm('Delete your account permanently?');">
-        {% csrf_token %}
-        <button class="btn btn--danger" type="submit">Delete my account</button>
-      </form>
+            <div class="field">
+                <label for="email">Email</label>
+                <input class="input" id="email" name="email"
+                       type="email" value="{{ request.user.email }}" required>
+            </div>
+
+            <div class="field">
+                <label for="bio">About you</label>
+                <textarea class="textarea" id="bio" name="bio">{{ profile.bio }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn" type="submit">Save changes</button>
+            </div>
+        </form>
     </section>
+
+    <section class="card" aria-labelledby="password-title">
+        <h2 id="password-title">Change password</h2>
+
+        <form class="form" action="{% url 'task:profile_password' %}" method="post">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="current-password">Current password</label>
+                <input class="input" id="current-password"
+                       name="current_password" type="password"
+                       autocomplete="current-password" required>
+            </div>
+
+            <div class="field">
+                <label for="new-password">New password</label>
+                <input class="input" id="new-password"
+                       name="new_password" type="password"
+                       autocomplete="new-password" minlength="8" required>
+                <p class="field__hint">Use at least 8 characters.</p>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn" type="submit">Update password</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<section class="card card--danger" aria-labelledby="delete-title">
+    <h2 id="delete-title">Delete account</h2>
+    <p>This permanently removes your account and all your tasks.</p>
+
+    <button class="btn btn--danger" type="button" id="open-delete-modal">
+        Delete my account
+    </button>
+</section>
+
+<!-- Delete account modal -->
+<div class="delete-modal" id="delete-modal"
+     role="dialog" aria-modal="true"
+     aria-labelledby="modal-title" aria-hidden="true">
+
+    <div class="delete-modal__box">
+        <button class="delete-modal__close" id="close-delete-modal"
+                type="button" aria-label="Close modal">&times;</button>
+
+        <h2 id="modal-title">Delete your account?</h2>
+
+        <p>
+            This action is permanent. Enter your current account password
+            to confirm that you want to delete your account.
+        </p>
+
+        <form class="form" action="{% url 'task:profile_delete' %}"
+              method="post" id="delete-account-form">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="delete-password">Account password</label>
+                <input class="input" id="delete-password"
+                       name="password" type="password"
+                       autocomplete="current-password"
+                       placeholder="Enter your password" required>
+            </div>
+
+            <div class="delete-modal__actions">
+                <button class="btn" type="button" id="cancel-delete">
+                    Cancel
+                </button>
+
+                <button class="btn btn--danger" type="submit">
+                    Confirm delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.delete-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.65);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.delete-modal.is-open {
+    display: flex;
+}
+
+.delete-modal__box {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 28px;
+    border-radius: 16px;
+    background: var(--card, #fff);
+    color: var(--text, #222);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.delete-modal__box h2 {
+    margin: 0 30px 12px 0;
+}
+
+.delete-modal__box > p {
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.delete-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.delete-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.delete-modal__actions .btn {
+    cursor: pointer;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+</style>
+
+<script>
+(function () {
+    const modal = document.getElementById("delete-modal");
+    const openButton = document.getElementById("open-delete-modal");
+    const closeButton = document.getElementById("close-delete-modal");
+    const cancelButton = document.getElementById("cancel-delete");
+    const passwordInput = document.getElementById("delete-password");
+
+    function openModal() {
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+        passwordInput.value = "";
+        passwordInput.focus();
+    }
+
+    function closeModal() {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+        openButton.focus();
+    }
+
+    openButton.addEventListener("click", openModal);
+    closeButton.addEventListener("click", closeModal);
+    cancelButton.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && modal.classList.contains("is-open")) {
+            closeModal();
+        }
+    });
+})();
+</script>
 {% endblock content %}

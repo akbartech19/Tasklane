@@ -35,7 +35,7 @@ def home_page(request):
         "tasks": tasks,
         "status": status,
         "priority": priority,
-        "q": q,
+        "q": q, 
         "open_count": open_count,
         "done_count": done_count,
     })
@@ -136,15 +136,26 @@ def profile_password(request):
     else:
         request.user.set_password(new)
         request.user.save()
-        update_session_auth_hash(request, request.user)  # tizimdan chiqib ketmaslik uchun
+        update_session_auth_hash(request, request.user)  
         messages.success(request, "Password updated!")
     return redirect("task:profile")
+
 
 
 @login_required
 @require_POST
 def profile_delete(request):
     user = request.user
+    password = request.POST.get("password", "")
+
+    if not user.check_password(password):
+        messages.error(
+            request,
+            "Incorrect password. Your account has not been deleted."
+        )
+        return redirect("task:profile")
+
     logout(request)
-    user.delete()  # tasklar ham CASCADE bilan o'chadi
+    user.delete()
+
     return redirect(settings.LOGIN_URL)
